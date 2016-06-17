@@ -42,17 +42,16 @@ def laravel_view():
     v = '/resources/views'
     if re.search("@extends|@include|view", line):
         f = cfile.replace('.', '/')
-        dir = path + '/' + v
+        dir = path + v
         for d in f.split('/')[:-1]:
             dir = "%s/%s" % (dir, d)
             if not os.path.isdir(dir):
                 os.mkdir(dir)
-        vv = "%s/%s/%s.blade.php" % (path, v, f)
+        vv = "%s%s/%s.blade.php" % (path, v, f)
         vim.command(':e %s' % vv)
     else:
         path += v
-        # print(vim.eval('exists(":CtrlP")'))
-        num = int(vim.eval('exists(":CtrlPx")'))
+        num = int(vim.eval('exists(":CtrlP")'))
         if num > 0:
             vim.command('CtrlP %s' % path)
         else:
