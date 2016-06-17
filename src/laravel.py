@@ -35,26 +35,25 @@ def laravel_controller():
 
 
 def laravel_view():
+    cfile = vim.eval('expand("<cfile>")')
     line = vim.current.line
     name = vim.current.buffer.name
     path = getComposerPath(name)
     v = '/resources/views'
-    if re.search("@extends\(\'(.*)\'\)", line):
-        m = re.search("@extends\(\'(.*)\'", line)
-    else:
-        m = re.search("view\(\'(.*)\'", line)
-
-    if m:
-        f = m.group(1)
-        f = f.replace('.', '/')
+    if re.search("@extends|@include|view", line):
+        f = cfile.replace('.', '/')
         dir = path + '/' + v
-
         for d in f.split('/')[:-1]:
-            path = "%s/%s" % (dir, d)
+            dir = "%s/%s" % (dir, d)
             if not os.path.isdir(dir):
-                os.mkdir(path)
+                os.mkdir(dir)
         vv = "%s/%s/%s.blade.php" % (path, v, f)
         vim.command(':e %s' % vv)
     else:
         path += v
-        vim.command('CtrlP %s' % path)
+        # print(vim.eval('exists(":CtrlP")'))
+        num = int(vim.eval('exists(":CtrlPx")'))
+        if num > 0:
+            vim.command('CtrlP %s' % path)
+        else:
+            vim.command('e %s' % path)
