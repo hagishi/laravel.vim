@@ -9,3 +9,7 @@ endfunction
 function! laravel#view(...)
 python laravel_view()
 endfunction
+
+function! laravel#use()
+python laravel_use()
+endfunction

@@ -56,3 +56,14 @@ def laravel_view():
             vim.command('CtrlP %s' % path)
         else:
             vim.command('e %s' % path)
+
+
+def laravel_use():
+    line = str(vim.current.line)
+    x = re.search(r'\s([\w\\]+)\s?', line)
+    if x:
+        sr = x.group(1)
+        name = sr.split('\\')[-1]
+        n = int(vim.eval("line('.')"))
+        vim.current.buffer[n - 1] = line.replace(sr, name)
+        vim.current.buffer.append('use %s;' % x.group(1), 2)
